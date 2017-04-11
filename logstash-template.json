@@ -1,0 +1,62 @@
+{
+"template": "*-service.log.*",
+  "settings": {
+    "index": {
+      "max_result_window": "1000000",
+      "mapping": {
+        "total_fields": {
+          "limit": "20000"
+        },
+        "ignore_malformed": true
+      },
+      "refresh_interval": "5s",
+      "number_of_replicas": "0"
+    }
+  },
+  "mappings": {
+    "_default_": {
+      "dynamic_templates": [
+        {
+          "string": {
+            "mapping": {
+              "index": "not_analyzed",
+              "type": "string"
+            },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "headers": {
+          "properties": {
+            "x-request-id": { "index": "not_analyzed", "type": "text" },
+            "x-request-ip": { "type": "ip" },
+            "host": { "index": "not_analyzed", "type": "text" },
+            "user-agent": { "index": "not_analyzed", "type": "text" }
+          }
+        },
+        "referer": { "index": "not_analyzed", "type": "text" },
+        "serverName": { "index": "not_analyzed", "type": "text" },
+        "requestParams": {
+          "properties": {
+            "albumName": { "index": "not_analyzed", "type": "text" }
+          }
+        },
+        "serviceTrace": {
+          "properties": {
+            "requestParams": {
+              "properties": {
+                "cpitemid": { "index": "not_analyzed", "type": "text" },
+                "desccount": { "index": "not_analyzed", "type": "text" }
+              }
+            }
+          }
+        },
+        "requestUri": { "fielddata": true, "analyzer": "standard", "type": "text" },
+        "sessionId": { "index": "not_analyzed", "type": "text" },
+        "serviceName": { "index": "not_analyzed", "type": "text" },
+        "processingTime": { "type": "double" }
+      }
+    }
+  }
+}
